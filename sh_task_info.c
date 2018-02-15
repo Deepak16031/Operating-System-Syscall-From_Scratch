@@ -36,13 +36,14 @@ asmlinkage long sys_sh_task_info(int pid, char *name)
 	struct task_struct *task;
 	struct sched_entity *se;
 	struct thread_struct *thread;
+	sigset_t *blocked,*real_blocked;
 	getpid = find_get_pid(pid);
 	if (getpid == NULL)
 		return -14;
 	task = pid_task(getpid,PIDTYPE_PID);
 	se = &(task->se);
 	thread = &(task->thread);
-	char *data = task->comm;
+//	char *data = task->comm;
 //	printk("%s",task->comm);
 	printk("value of state is %ld",task->state);
 	strcat(message,"state is ");
@@ -102,7 +103,23 @@ asmlinkage long sys_sh_task_info(int pid, char *name)
 //	printk("sysenter_cs is %lu\n",thread->sysenter_cs);
 //	printk("value of blocked is %s\n",strsignal(task->blocked));
 //	printk("value of real_blocked is %x\n",task->real_blocked);
-	printk(KERN_ALERT "writing to the console");
+//	printk(KERN_ALERT "writing to the console");
+	blocked =&(task->blocked);
+	int b = 0;
+	int rb = 0;
+	real_blocked = &(task->real_blocked);
+	int i;
+	for(i = 0;i < 64;i++)
+	{
+		printk("reached in loop %d",i);
+		if (sigismember(blocked,i))
+			b++;
+		if (sigismember(real_blocked,i))
+			rb++;
+	}
+
+	printk(KERN_ALERT"Number of blocked are %d",b);
+	printk(KERN_ALERT"Number of realblocked are %d",rb);
 	old_fs = get_fs();
 	set_fs(KERNEL_DS);
 	// *data = "write to file";
