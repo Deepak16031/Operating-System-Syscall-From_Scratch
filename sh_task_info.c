@@ -126,7 +126,7 @@ asmlinkage long sys_sh_task_info(int pid, char *name)
 	fd = sys_open(name,O_WRONLY,0644);
 	if (fd >=0)
 	{
-		sys_write(fd,message,strlen(message));
+		
 		file = fget(fd);
 		if (file)
 			{
