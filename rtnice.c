@@ -13,7 +13,7 @@
 #include <linux/cdev.h>
 #include <linux/proc_fs.h>
 
-asmlinkage lonf sys_rtnice(int pid,int set_rtnice){
+asmlinkage long sys_rtnice(int pid,int set_rtnice){
 	printk("Hello world\n");
 	struct pid *getpid;
 	struct task_struct *task;
